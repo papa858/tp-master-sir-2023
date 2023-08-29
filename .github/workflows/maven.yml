@@ -25,7 +25,7 @@ jobs:
     - name: Set up JDK
       uses: actions/setup-java@v2
       with:
-        java-version: '11'
+        java-version: '17'
         distribution: 'adopt'
 
     - name: Build with Maven
@@ -48,7 +48,7 @@ jobs:
       uses: dawidd6/action-send-mail@v2
       with:
         server_address: smtp.example.com
-        server_port: 2000
+        server_port: 865
         username: ${{ sysamba }}
         password: ${{ 123 }}
         subject: Build Successful: ${{ github.workflow }} - ${{ github.sha }}
