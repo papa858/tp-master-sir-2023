@@ -1,11 +1,12 @@
 # This workflow will build a Java project with Ant
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-ant
 
-
-
 name: Build and Test
 
-on: [push]
+on:
+  push:
+    branches:
+      - main
 
 jobs:
   build:
@@ -14,12 +15,31 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
-      
+
     - name: Set up JDK
       uses: actions/setup-java@v2
       with:
-        java-version: '11'
-        
-    - name: Build with Maven
-      run: mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install
+        java-version: '17'
 
+    - name: Build with Maven
+      run: mvn clean install
+
+    - name: Run Tests
+      run: mvn test
+
+  notify:
+    needs: build
+    runs-on: ubuntu-latest
+    if: always()
+
+    steps:
+    - name: Send success email
+      uses: dawidd6/action-send-mail@v2
+      with:
+        server_address: smtp.example.com  # Remplacez par l'adresse de votre serveur SMTP
+        server_port: 465
+        username: sysamba  # Votre nom d'utilisateur SMTP
+        password: 123  # Votre mot de passe SMTP
+        to: sambasy837@gmail.com  # Votre adresse e-mail de réception
+        from: mamediarra15@gmail.com  # Votre adresse e-mail d'envoi
+        body: The build was successful. No further action is required.
